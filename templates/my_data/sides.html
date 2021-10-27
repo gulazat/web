@@ -1,0 +1,38 @@
+{% load datas_tags %}
+
+
+<div class="row" style="margin-left:100px;">
+    <h3 style="font-size: 25px; color: red;">进度表</h3>
+
+    {% get_recent_data as recent_data %}
+
+        {% for datas in recent_data %}
+            <div>
+                <a href="{% url 'my_data:data_detail' datas.pk %}">{{ datas.title }}</a>
+
+<!--                <div style="float: left; border-right: 1px solid #2d7da4;"> &nbsp; &nbsp; &nbsp;&nbsp;{{ datas.author }} 发表于: {{ datas.created_time |date:'Y年m月d日' }}</div>-->
+                  <div>  {{ datas.created_time |date:'Y年m月d日' }}</div>
+
+            </div>
+
+        {% endfor %}
+
+</div>
+<br/>
+<div class="row" style="margin-left:100px;">
+    <h3 style="font-size: 25px; color: red;">热点</h3>
+
+        {% get_popular_data as popular_data %}
+
+        {% for datas in popular_data %}
+            <div>
+                <a href="{% url 'my_data:data_detail' datas.pk %}">{{ datas.title }}</a>&nbsp; &nbsp; &nbsp;&nbsp;<span>浏览量: {{ datas.visiting }}</span>
+<!--                <span class="badge" style="color: white;background-color: deepskyblue">{{ datas.visiting }}</span>-->
+
+            </div>
+
+        {% endfor %}
+
+</div>
+<br/>
+

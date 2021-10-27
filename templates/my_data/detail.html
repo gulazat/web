@@ -1,0 +1,155 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load comments %}
+
+{% block title %}detail_page{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-7" style="padding-top: 15px;">
+            <h1>{{ datas.title }}</h1>
+            <p>
+                <strong>{{ datas.author }}</strong>
+                &nbsp;&nbsp;{{ datas.created_time|date:'Y年m月d日' }}
+
+                &nbsp;&nbsp;分类;
+                {% for category in datas.category.all %}
+                &nbsp;&nbsp;<a href="{% url 'my_data:data_category' category.pk %}">{{ category.cname }}</a>
+                {% endfor %}
+
+                 &nbsp;&nbsp;标签;
+                {% for tag in datas.tags.all %}
+                &nbsp;&nbsp;<a href="{% url 'my_data:data_tag' tag.pk %}">{{ tag.tname }}</a>
+                {% endfor %}
+
+                 &nbsp;&nbsp;浏览量;
+                &nbsp;&nbsp;{{ datas.visiting }}
+            </p>
+             {% if datas.img %}
+                <img src="{{datas.img.url }}" />
+            {% endif %}
+            <br>
+
+            <p>
+                {{ datas.body |safe }}
+            </p>
+            <br>
+
+            <div class="row">
+
+                {% get_comment_form for datas as form %}
+                {% get_comment_count for datas as comment_count %}
+                <h3>评论总数:{{comment_count }}</h3>
+                <hr/>
+            </div>
+
+<!--            评论表单-->
+            {% if request.session.login or request.user.is_authenticated %}
+            <div class="row">
+                <form  class="form-horizontal" action="{% comment_form_target %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for = "input_title" class="pull-left control-label">评论标题:</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" name ="comment_title" id ="input_title" placeholder="请输入标题" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for = "input_comment" class="pull-left control-label">评论内容:</label>
+                        <div class="col-sm-6">
+                            <textarea  style="resize:none;" class="form-control" rows = 6 name ="comment" id ="input_comment" placeholder="在此输入评论" required ></textarea>
+                        </div>
+                    </div>
+
+                    <span style="display: none;">{{ form.honeypot }}</span>
+                    {{ form.content_type }}
+                    {{ form.object_pk }}
+                    {{ form.timestamp }}
+                    {{form.security_hash }}
+                    <input type="hidden" name="next" value="{% url 'my_data:data_detail' datas.pk %}" />
+                    <input name="parent_id" type="hidden" value="-1" />
+                    <input name="level" type="hidden" value="0">
+
+                    <div class="form-group col-sm-7">
+                        <div class="pull-left" style="margin-left: 68px;">
+                            <button type="reset" class="btn btn-default"><span class="glyphicon glyphicon-repeat"></span>&nbsp;&nbsp;重置</button>
+                        </div>
+                        <div class="pull-right" style="margin-left: 12px;">
+                            <button type="submit" class="btn btn-success" id="id_submit"><span class="glyphicon glyphicon-send"></span>&nbsp;&nbsp;评论</button>
+                        </div>
+                    </div>
+
+
+
+                </form>
+            </div>
+            {% else %}
+            <h3>登录后才可以评论</h3>
+            {% endif %}
+            <hr>
+<!--             评论显示区-->
+            <div class="row">
+
+            </div>
+            {% for comment in comment_list %}
+            <div class="single_comment" style="margin-left: {{ comment.level }} em">
+
+
+                <div class="col-md-11 comment-content" style="margin-bottom: 10px;">
+                    <strong>{{ comment.comment_title }}</strong>
+                    <div>
+                        {% if comment.parent_comment %}
+                            {% if comment.user_name %}
+
+                                {{ comment.user_name }}{{ request.user }}
+                                 <i class="glyphicon glyphicon-share-alt"></i>
+                                {{ comment.parent_comment.user_name }}{{ request.user }}
+                            {% else %}
+                                {{ request.user }}
+                            {% endif %}
+                             <i class="glyphicon glyphicon-share-alt"></i>
+                            {{ comment.parent_comment.user_name }}
+
+                        {% else %}
+                                By &nbsp;&nbsp;
+                            {% if comment.user_name %}
+
+                                {{ comment.user_name }}
+                            {% else %}
+                                {{ request.user }}
+                            {% endif %}-->
+
+                         &nbsp; &nbsp; &nbsp;
+
+                        {% endif %}
+                        <em>{{ comment.submit_date }}</em>
+                            {% if not request.session.login or request.user.is_authenticated %}
+
+                        &nbsp;&nbsp;<a href="{% url 'my_data:comment_reply' comment.pk %}">回复</a>
+                        {% endif %}
+                    </div>
+                    <br>
+                    <p>{{ comment.comment }}</p>
+                </div>
+            </div>
+            {% endfor %}
+
+
+
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <div style="margin-top: 30px;">
+                {% include 'my_data/sides.html' %}
+</div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+{%endblock %}

@@ -1,0 +1,112 @@
+{% extends 'base/base.html' %}
+
+{% load datas_tags %}
+
+{% block title %}tags{% endblock %}
+
+
+
+{% block content %}
+
+
+
+<div class="categ_name" style="padding-top:40px;">
+
+    {% get_classification as category_list %}
+
+    {% for category in category_list %}
+        <a href="{% url 'my_data:data_category' category.pk %}"
+           style=" margin-left:40px; font-size: 25px; text-decoration: none;" > <span class="label {% cycle 'label-default' 'label-primary' 'label-success' 'label-info' 'label-warning' 'label-danger' %}">
+            {{ category.cname }}</span></a>
+    {% endfor %}
+
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-7">
+            <div style="padding-top:60px;">
+                {% get_whole_categ as whole_categ %}
+                    {% for tag_name in whole_categ %}
+                <a href="{% url 'my_data:data_detail' tag_name.pk %}" style="font-size: 20px;">{{tag_name.title }}</a>
+    <!--                {% if tag_name.img %}-->
+    <!--                <img src="{{tag_name.img.url }}"/>-->
+    <!--                {% endif %}-->
+                    {% if tag_name.abstract %}
+                        <p>{{ tag_name.abstract }}</p>
+                    {% else %}
+                        <p>{{tag_name.body | truncatechars:20 | safe }}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+
+
+
+
+ <div id="pagination" class="pull-left">
+                <ul class="pagination pahination-lg">
+                    {% if datas.has_previous %}
+                        <li class="previous"><a href="?page={{ datas.previous_page_number }}">
+                            <i class="glyphicon glyphicon-arrow-left"></i></i>上一页</a></li>
+                    {% endif %}
+
+                    {% if first %}
+                        <li><a href="?page=1">1</a></li>
+                    {% endif %}
+
+                    {% if left %}
+                        {% if left_has_more %}
+                            <span>....</span>
+                    {% endif %}
+
+                    {% for i in left %}
+
+                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                        {% endfor %}
+                    {% endif %}
+
+
+                    <li class="active"><a href="?page={{ datas.number }}">{{ datas.number }}</a></li>
+
+                    {% if right %}
+                        {% for i in right %}
+                            <li><a href="?page={{ i }}">{{ i }}</a></li>
+                        {% endfor %}
+
+                        {% if right_has_more %}
+                            <span>....</span>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if last %}
+                        <li class=""><a href="?page={{ datas.num_pages }}">{{ datas.num_pages }}</a></li>
+                    {% endif %}
+
+                    {% if datas.has_next %}
+                    <li class="next"><a href="?page={{ datas.next_page_number }}">
+                        <i class="glyphicon glyphicon-arrow-right"></i>下一页</a></li>
+                    {% endif %}
+
+
+                </ul>
+
+            </div>
+        </div>
+        <div class="col-md-5">
+            {% include 'my_data/sides.html' %}
+        </div>
+
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}

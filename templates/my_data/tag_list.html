@@ -1,0 +1,17 @@
+{% load datas_tags %}
+
+
+<div class="tag_name" style="margin-top:25px;">
+
+    {% get_tags as tag_list %}
+
+        {% for tagging in tag_list %}
+
+            <a href="{% url 'my_data:data_tag' tagging.pk %}" style="margin-left: 20px; font-size: 25px; text-decoration: none;">
+                <span class="label {% cycle 'label-default' 'label-primary' 'label-success' 'label-info' 'label-warning' 'label-danger' %}">
+                    {{ tagging.tname }}</span></a>
+
+        {% endfor %}
+
+
+</div>

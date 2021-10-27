@@ -1,0 +1,43 @@
+{% extends 'base/base.html' %}
+
+
+{% load static %}
+
+{% block content %}
+
+
+
+
+
+<div class="login" style="background-image: url({% static 'images/Flower.JPG' %});background-size:100% 1; padding-top: 50px; margin: auto 200px; min-height: 600px;">
+    <h1 style="padding-top: 50px; margin-left:60px; color: red;">努力学习和努力生活是最好的生活态度</h1>
+    <h3 style="margin-left: 300px; margin-top: 40px;">登录</h3>
+    <form action="{% url 'users:login' %}" method="post" style="margin-left: 300px;">
+        {% csrf_token %}
+        <p>
+            <label for="username">用户名</label>
+                {{ form.username }}
+        </p>
+
+        <p>
+            <label for="password">密码</label>
+                {{ form.password }}
+        </p>
+
+            <button class="btn btn-success btn-lg" type="submit">登录</button>
+
+        </form>
+
+    <div class="message" style="margin-left: 300px; margin-top: 40px;">
+                还没有账号？<a href="{% url 'users:signup' %}" style="color: green; background-color: white; ">注册</a>
+
+
+    </div>
+</div>
+
+<h2 style="color: red;">我的世界，因为你的支持而多了一份执着。 我的世界，因为你的信任而多了一份勇敢。</h2>
+
+
+
+
+{% endblock %}

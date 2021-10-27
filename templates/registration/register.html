@@ -1,0 +1,41 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="register" style="background-image: url({% static 'images/Rose.JPG' %});background-size:100% 1;padding-top: 50px; margin: auto 200px; min-height: 600px;">
+    <form class=" " novalidate method="post" action="{% url 'users:signup' %}" enctype="multipart/form-data" style="margin-left: 300px; margin-top: 200px;" >
+            {% csrf_token %}
+            <div class="">
+                <div class="">
+                    <div class="">
+<!--                        <label for="username">用户名</label>-->
+                        {{form.username}}
+                    </div>
+                </div>
+                <div class="">
+                    <div class="">
+<!--                        <label for="password1">密码</label>-->
+                        {{form.password1}}
+                    </div>
+                </div>
+                <div class="">
+                    <div class="">
+<!--                        <label for="password2">确认密码</label>-->
+                        {{form.password2}}
+                    </div>
+                </div>
+                <button class="" type="submit">注册</button>
+
+            </div>
+
+
+
+    </form>
+</div>
+
+
+
+{% endblock %}
+

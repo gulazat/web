@@ -1,0 +1,15 @@
+{% load datas_tags %}
+
+<div class="row" style="padding-top: 10px;">
+    {% get_classification as category_list %}
+
+        {% for category in category_list %}
+    <a href="{% url 'my_data:data_category' category.pk %}" style="margin-left:35px; padding-right: 20px;font-size: 35px; text-decoration: none;" >
+        <span class="label {% cycle 'label-default' 'label-primary' 'label-success' 'label-info' 'label-warning' 'label-danger' %}">
+                        {{ category.cname }}</span></a>
+
+
+
+            {% endfor %}
+
+</div>
